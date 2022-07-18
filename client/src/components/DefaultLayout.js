@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Layout, Menu } from "antd";
 import {
   MenuUnfoldOutlined,
@@ -7,19 +7,19 @@ import {
   HomeOutlined,
   CopyOutlined,
   UnorderedListOutlined,
-  LogoutOutlined,
+  LoginOutlined,
   ShoppingCartOutlined,
 } from "@ant-design/icons";
-import "../resources/layout.css";
+import "../resourses/layout.css";
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 const { Header, Sider, Content } = Layout;
 
 const DefaultLayout = (props) => {
-  const navigate = useNavigate();
+
   const [collapsed, setCollapsed] = useState(false);
   const { cartItems, loading } = useSelector((state) => state.rootReducer);
+  const navigate = useNavigate()
   const toggle = () => {
     setCollapsed(!collapsed);
   };
@@ -31,50 +31,45 @@ const DefaultLayout = (props) => {
   return (
     <Layout>
       {loading && (
-       <diV className="spinner">
+        <div className="spinner">
           <div
           class="spinner-border"
           role="status"
         >
         </div>
-       </diV>
+        </div>
       )}
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="logo">
-          <h3>S-Bazaar POS</h3>
+          <h3>{collapsed ? 'SP' : 'SHEY POS'}</h3>
         </div>
         <Menu
           theme="dark"
           mode="inline"
           defaultSelectedKeys={window.location.pathname}
-          items={[
-            {
-              key: "/home",
-              icon: <HomeOutlined />,
-              label: <Link to="/home">Home</Link>,
-            },
-            {
-              key: "/bills",
-              icon: <CopyOutlined />,
-              label: <Link to="/bills">Bills</Link>,
-            },
-            {
-              key: "/items",
-              icon: <UnorderedListOutlined />,
-              label: <Link to="/items">Items</Link>,
-            },
-            {
-              key: "/customers",
-              icon: <UserOutlined />,
-              label: <Link to="/customers">Customers</Link>,
-            },
-            {
-              key: "/logout",
-              icon: <LogoutOutlined />,
-              label: "Logout",
-            },
-          ]}
-        />
+        >
+          <Menu.Item key="/home" icon={<HomeOutlined />}>
+            <Link to="/home">Home</Link>
+          </Menu.Item>
+          <Menu.Item key="/cart" icon={<ShoppingCartOutlined />}>
+            <Link to="/cart">Cart</Link>
+          </Menu.Item>
+          <Menu.Item key="/bills" icon={<CopyOutlined />}>
+            <Link to="/bills">Bills</Link>
+          </Menu.Item>
+          <Menu.Item key="/items" icon={<UnorderedListOutlined />}>
+            <Link to="/items">Items</Link>
+          </Menu.Item>
+          <Menu.Item key="/customers" icon={<UserOutlined />}>
+            <Link to="/customers">Customers</Link>
+          </Menu.Item>
+          <Menu.Item key="/logout" icon={<LoginOutlined />} onClick={()=>{
+            localStorage.removeItem('pos-user')
+            navigate('/login')
+          }}>
+            Logout
+          </Menu.Item>
+        </Menu>
       </Sider>
       <Layout className="site-layout">
         <Header className="site-layout-background" style={{ padding: 10 }}>
@@ -101,7 +96,7 @@ const DefaultLayout = (props) => {
           style={{
             margin: "10px",
             padding: 24,
-            minHeight: 280,
+            minHeight:'80vh'
           }}
         >
           {props.children}
@@ -110,4 +105,5 @@ const DefaultLayout = (props) => {
     </Layout>
   );
 };
+
 export default DefaultLayout;

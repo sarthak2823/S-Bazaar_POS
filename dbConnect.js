@@ -1,15 +1,20 @@
-const mongoose = require ('mongoose')
+require("dotenv").config();
+const mongoose = require('mongoose')
 
-const URL= 'mongodb+srv://Sarthak2823:Sarthak1234@cluster0.vnrji.mongodb.net/?retryWrites=true&w=majority'
+const MONGODB = process.env.MONGODB;
 
-mongoose.connect(URL)
+mongoose.connect(MONGODB, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  });
 
-let connectionobj = mongoose.connection
 
-connectionobj.on('connected' , ()=>{
-    console.log('MongoDB connected successfully')
+let connectionObj = mongoose.connection
+
+connectionObj.on('connected' , ()=>{
+    console.log('Mongo DB Connection Successfull')
 })
 
-connectionobj.on('error', ()=>{
-    console.log('MongoDB connection failed')
+connectionObj.on('error' , ()=>{
+    console.log('Mongo DB Connection Failed')
 })

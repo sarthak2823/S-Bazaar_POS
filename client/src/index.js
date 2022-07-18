@@ -1,33 +1,31 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
+import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
-import { createStore , combineReducers } from "redux";
+import { createStore, combineReducers } from "redux";
 import { rootReducer } from "./redux/rootReducer";
 
+const finalReducer = combineReducers({
+  rootReducer: rootReducer,
+});
+
 const initialState = {
-  rootreducer: {
+  rootReducer: {
     cartItems: localStorage.getItem("cartItems")
       ? JSON.parse(localStorage.getItem("cartItems"))
       : [],
   },
 };
 
-const finalReducer = combineReducers({
-  rootReducer: rootReducer,
-},[]);
-
-
-
 const store = createStore(finalReducer , initialState);
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
+ReactDOM.render(
   <Provider store={store}>
     <App />
-  </Provider>
+  </Provider>,
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function
